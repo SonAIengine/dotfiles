@@ -5,3 +5,7 @@
 vim.opt.background = "dark"
 vim.opt.spell = false
 vim.opt.spelllang = {}
+
+-- 라인 번호 숨기기
+vim.opt.number = false
+vim.opt.relativenumber = false
