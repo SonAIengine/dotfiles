@@ -81,7 +81,9 @@ else
     aarch64) TS_ASSET="tree-sitter-linux-arm64.gz" ;;
     *) err "unsupported arch: $ARCH"; exit 1 ;;
   esac
-  curl -fsSL "https://github.com/tree-sitter/tree-sitter/releases/latest/download/$TS_ASSET" \
+  # v0.23.0: Ubuntu 22.04 glibc 2.35 호환 (최신은 2.39 요구)
+  TS_VER="v0.23.0"
+  curl -fsSL "https://github.com/tree-sitter/tree-sitter/releases/download/$TS_VER/$TS_ASSET" \
     | gunzip > "$BIN_DIR/tree-sitter"
   chmod +x "$BIN_DIR/tree-sitter"
   log "tree-sitter installed -> $BIN_DIR/tree-sitter"
