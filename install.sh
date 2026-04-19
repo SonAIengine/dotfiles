@@ -70,6 +70,23 @@ else
   log "yazi installed -> $BIN_DIR/yazi"
 fi
 
+# 3b. tree-sitter CLI (nvim-treesitter parser 빌드용)
+if [ -x "$BIN_DIR/tree-sitter" ] || command -v tree-sitter >/dev/null 2>&1; then
+  log "tree-sitter already installed, skipping"
+else
+  log "installing tree-sitter CLI"
+  ARCH=$(uname -m)
+  case "$ARCH" in
+    x86_64)  TS_ASSET="tree-sitter-linux-x64.gz" ;;
+    aarch64) TS_ASSET="tree-sitter-linux-arm64.gz" ;;
+    *) err "unsupported arch: $ARCH"; exit 1 ;;
+  esac
+  curl -fsSL "https://github.com/tree-sitter/tree-sitter/releases/latest/download/$TS_ASSET" \
+    | gunzip > "$BIN_DIR/tree-sitter"
+  chmod +x "$BIN_DIR/tree-sitter"
+  log "tree-sitter installed -> $BIN_DIR/tree-sitter"
+fi
+
 # 4. ~/.bashrc 설정 (PATH + y 함수)
 if ! grep -q 'HOME/.local/bin' "$HOME/.bashrc" 2>/dev/null; then
   log "adding ~/.local/bin to PATH in ~/.bashrc"
