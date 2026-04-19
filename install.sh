@@ -70,6 +70,50 @@ else
   log "yazi installed -> $BIN_DIR/yazi"
 fi
 
+# 3a. fd (파일 검색) — musl 정적 빌드
+if [ -x "$BIN_DIR/fd" ] || command -v fd >/dev/null 2>&1; then
+  log "fd already installed, skipping"
+else
+  log "installing fd"
+  ARCH=$(uname -m)
+  case "$ARCH" in
+    x86_64)  FD_TARGET="x86_64-unknown-linux-musl" ;;
+    aarch64) FD_TARGET="aarch64-unknown-linux-musl" ;;
+    *) err "unsupported arch: $ARCH"; exit 1 ;;
+  esac
+  FD_VER="v10.2.0"
+  TMP=$(mktemp -d)
+  curl -fsSL "https://github.com/sharkdp/fd/releases/download/$FD_VER/fd-$FD_VER-$FD_TARGET.tar.gz" -o "$TMP/fd.tar.gz"
+  tar xzf "$TMP/fd.tar.gz" -C "$TMP"
+  EXT=$(find "$TMP" -maxdepth 1 -type d -name "fd-*" | head -1)
+  cp "$EXT/fd" "$BIN_DIR/fd"
+  chmod +x "$BIN_DIR/fd"
+  rm -rf "$TMP"
+  log "fd installed -> $BIN_DIR/fd"
+fi
+
+# 3a2. ripgrep (내용 검색) — musl 정적 빌드
+if [ -x "$BIN_DIR/rg" ] || command -v rg >/dev/null 2>&1; then
+  log "ripgrep already installed, skipping"
+else
+  log "installing ripgrep"
+  ARCH=$(uname -m)
+  case "$ARCH" in
+    x86_64)  RG_TARGET="x86_64-unknown-linux-musl" ;;
+    aarch64) RG_TARGET="aarch64-unknown-linux-gnu" ;;
+    *) err "unsupported arch: $ARCH"; exit 1 ;;
+  esac
+  RG_VER="14.1.1"
+  TMP=$(mktemp -d)
+  curl -fsSL "https://github.com/BurntSushi/ripgrep/releases/download/$RG_VER/ripgrep-$RG_VER-$RG_TARGET.tar.gz" -o "$TMP/rg.tar.gz"
+  tar xzf "$TMP/rg.tar.gz" -C "$TMP"
+  EXT=$(find "$TMP" -maxdepth 1 -type d -name "ripgrep-*" | head -1)
+  cp "$EXT/rg" "$BIN_DIR/rg"
+  chmod +x "$BIN_DIR/rg"
+  rm -rf "$TMP"
+  log "ripgrep installed -> $BIN_DIR/rg"
+fi
+
 # 3b. tree-sitter CLI (nvim-treesitter parser 빌드용)
 if [ -x "$BIN_DIR/tree-sitter" ] || command -v tree-sitter >/dev/null 2>&1; then
   log "tree-sitter already installed, skipping"
