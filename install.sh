@@ -52,7 +52,7 @@ else
     *) err "unsupported arch: $ARCH"; exit 1 ;;
   esac
   TMP=$(mktemp -d)
-  curl -fsSL "https://github.com/sxyzz/yazi/releases/latest/download/$ASSET" -o "$TMP/yazi.zip"
+  curl -fsSL "https://github.com/sxyazi/yazi/releases/latest/download/$ASSET" -o "$TMP/yazi.zip"
   if command -v unzip >/dev/null 2>&1; then
     unzip -q "$TMP/yazi.zip" -d "$TMP"
   elif command -v python3 >/dev/null 2>&1; then
