@@ -46,9 +46,10 @@ if [ -x "$BIN_DIR/yazi" ] || command -v yazi >/dev/null 2>&1; then
 else
   log "installing yazi"
   ARCH=$(uname -m)
+  # musl = static binary (glibc 버전 독립, 구 배포판에서도 동작)
   case "$ARCH" in
-    x86_64)  ASSET="yazi-x86_64-unknown-linux-gnu.zip" ;;
-    aarch64) ASSET="yazi-aarch64-unknown-linux-gnu.zip" ;;
+    x86_64)  ASSET="yazi-x86_64-unknown-linux-musl.zip" ;;
+    aarch64) ASSET="yazi-aarch64-unknown-linux-musl.zip" ;;
     *) err "unsupported arch: $ARCH"; exit 1 ;;
   esac
   TMP=$(mktemp -d)
